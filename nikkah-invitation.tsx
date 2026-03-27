@@ -34,7 +34,6 @@ export default function Component() {
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current)
       }
-      // Cleanup audio on unmount
       if (audioRef.current) {
         audioRef.current.pause()
         audioRef.current.src = ""
@@ -86,13 +85,11 @@ export default function Component() {
   }
 
   const startAudio = () => {
-    // Strict guard - only play once
     if (audioStartedRef.current) {
       return
     }
     audioStartedRef.current = true
 
-    // Create audio element only once
     if (!audioRef.current) {
       const audio = new Audio()
       audio.src = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/0627%282%29-fHKFYsFQhHNnJVWGHooruickURw9h3.MP3"
@@ -102,11 +99,9 @@ export default function Component() {
       audioRef.current = audio
     }
 
-    // Play with error handling
     const playPromise = audioRef.current.play()
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        // Reset flag if autoplay blocked
         audioStartedRef.current = false
       })
     }
@@ -123,8 +118,6 @@ export default function Component() {
   const handleOpenInvitation = () => {
     setCurrentPage("loading")
     setLoadingProgress(0)
-    
-    // Reset audio state for fresh start
     audioStartedRef.current = false
 
     let localProgress = 0
@@ -133,7 +126,6 @@ export default function Component() {
     progressIntervalRef.current = setInterval(() => {
       localProgress += 2
       
-      // Trigger audio exactly once at 50%
       if (localProgress >= 50 && !audioTriggeredLocal) {
         audioTriggeredLocal = true
         startAudio()
@@ -157,7 +149,7 @@ export default function Component() {
   if (currentPage === "cover") {
     return (
       <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
-        {/* Video Background */}
+        {/* Video Background with overlay */}
         <div className="fixed inset-0 z-0">
           <video
             autoPlay
@@ -171,12 +163,14 @@ export default function Component() {
               type="video/mp4"
             />
           </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/30" />
         </div>
 
         <div className="text-center space-y-10 max-w-md mx-auto relative z-10">
-          <div className="space-y-2 fade-in-up delay-100">
+          {/* Bismillah with fade in down */}
+          <div className="space-y-2 fade-in-down delay-100">
             <p 
-              className="text-[#6b5548] text-xl tracking-widest drop-shadow-sm"
+              className="text-[#6b5548] text-xl tracking-widest drop-shadow-sm hover-lift"
               style={{ fontFamily: "Amiri, serif" }}
             >
               بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
@@ -189,32 +183,32 @@ export default function Component() {
             </p>
           </div>
 
-          {/* Main Title */}
+          {/* Main Title with scale animation */}
           <div className="fade-in-scale delay-200">
             <h2 
-              className="text-4xl md:text-5xl text-[#8b7355] font-normal tracking-wider drop-shadow-sm"
+              className="text-4xl md:text-5xl text-[#8b7355] font-normal tracking-wider drop-shadow-sm hover-lift"
               style={{ fontFamily: "Great Vibes, cursive" }}
             >
               Nikkah Mubarak
             </h2>
           </div>
 
-          {/* Names in elegant script */}
+          {/* Names with staggered fade in */}
           <div className="space-y-4">
             <h1
-              className="text-6xl md:text-7xl text-[#6b5548] font-normal leading-tight drop-shadow-sm fade-in-up delay-300"
+              className="text-6xl md:text-7xl text-[#6b5548] font-normal leading-tight drop-shadow-sm fade-in-up delay-300 hover-lift"
               style={{ fontFamily: "Great Vibes, cursive" }}
             >
               Usman
             </h1>
             <p 
-              className="text-4xl text-[#c9a0a0] drop-shadow-sm fade-in-scale delay-400"
+              className="text-4xl text-[#c9a0a0] drop-shadow-sm fade-in-scale delay-400 float"
               style={{ fontFamily: "Great Vibes, cursive" }}
             >
               &
             </p>
             <h1
-              className="text-6xl md:text-7xl text-[#6b5548] font-normal leading-tight drop-shadow-sm fade-in-up delay-500"
+              className="text-6xl md:text-7xl text-[#6b5548] font-normal leading-tight drop-shadow-sm fade-in-up delay-500 hover-lift"
               style={{ fontFamily: "Great Vibes, cursive" }}
             >
               Shafaq
@@ -229,10 +223,11 @@ export default function Component() {
             ٱلْـحَـمْدُ لِلّٰهِ
           </div>
 
+          {/* Button with bounce animation */}
           <div className="pt-4 fade-in-scale delay-700">
             <Button
               onClick={handleOpenInvitation}
-              className="bg-[#8b7355] hover:bg-[#6b5548] text-white rounded-full px-12 py-4 text-base font-medium shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 tracking-wider gentle-bounce"
+              className="bg-[#8b7355] hover:bg-[#6b5548] text-white rounded-full px-12 py-4 text-base font-medium shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 tracking-wider gentle-bounce hover-glow"
               style={{ fontFamily: "Cormorant Garamond, serif" }}
             >
               Open Invitation
@@ -261,19 +256,27 @@ export default function Component() {
               type="video/mp4"
             />
           </video>
-          {/* Light overlay for content readability */}
-          <div className="absolute inset-0 bg-white/30" />
+          <div className="absolute inset-0 bg-white/20" />
         </div>
 
         <div className="text-center space-y-10 max-w-md mx-auto relative z-10">
+          {/* Monogram with pulse animation */}
           <div className="relative pulse fade-in-scale">
-            <div className="w-48 h-48 mx-auto rounded-full bg-[#f5efe6]/90 backdrop-blur-sm p-3 shadow-2xl ring-2 ring-[#c9a0a0]/40">
+            <div className="w-48 h-48 mx-auto rounded-full bg-[#f5efe6]/90 backdrop-blur-sm p-3 shadow-2xl ring-2 ring-[#c9a0a0]/40 hover-glow">
               <div className="w-full h-full rounded-full overflow-hidden">
                 <img
                   src="/monogram.png"
                   alt="U & S Monogram"
                   className="w-full h-full object-cover rounded-full"
                   crossOrigin="anonymous"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-5xl font-light text-[#8b7355]" style="font-family: Great Vibes, cursive">U&S</div>';
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -289,7 +292,7 @@ export default function Component() {
             <div className="w-full max-w-xs mx-auto">
               <div className="bg-[#f5efe6]/80 rounded-full h-2 shadow-inner overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-[#c9a0a0] to-[#8b7355] h-2 rounded-full transition-all duration-100 ease-out"
+                  className="bg-gradient-to-r from-[#c9a0a0] to-[#8b7355] h-2 rounded-full transition-all duration-100 ease-out shimmer"
                   style={{ width: `${loadingProgress}%` }}
                 />
               </div>
@@ -309,7 +312,7 @@ export default function Component() {
   // ─── Main Invitation Page with Floral Border Background ─────────────────────────
   return (
     <div className="min-h-screen relative fade-in">
-      {/* Mobile Background - Tall floral image that scrolls with content */}
+      {/* Mobile Background */}
       <div 
         className="absolute inset-0 md:hidden"
         style={{ zIndex: -2 }}
@@ -331,32 +334,32 @@ export default function Component() {
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
-      {/* Subtle overlay for content readability */}
+      {/* Subtle overlay */}
       <div 
-        className="fixed inset-0 bg-white/20"
+        className="fixed inset-0 bg-white/20 backdrop-blur-[1px]"
         style={{ zIndex: -1 }}
       />
 
       {/* Back Button */}
-      <div className="fixed top-4 left-4" style={{ zIndex: 10 }}>
+      <div className="fixed top-4 left-4 z-20 fade-in-down delay-100">
         <Button
           onClick={() => {
             setCurrentPage("cover")
             stopAudio()
           }}
           variant="ghost"
-          className="text-[#6b5548] hover:bg-[#f5efe6]/70 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 backdrop-blur-sm border border-[#c9a0a0]/30"
+          className="text-[#6b5548] hover:bg-[#f5efe6]/70 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 backdrop-blur-sm border border-[#c9a0a0]/30 hover-lift"
           style={{ fontFamily: "Cormorant Garamond, serif" }}
         >
           ← Back
         </Button>
       </div>
 
-      {/* Main Content - Extra top padding on mobile to start below top flowers */}
-      <div className="relative max-w-lg mx-auto px-5 pt-36 md:pt-12 pb-12" style={{ zIndex: 1 }}>
+      {/* Main Content */}
+      <div className="relative max-w-lg mx-auto px-5 pt-36 md:pt-12 pb-12 z-10 stagger-children">
         
         {/* Header Section */}
-        <div className="text-center space-y-4 mb-16 px-3 py-6 bg-white/70 backdrop-blur-sm rounded-2xl fade-in-up delay-100">
+        <div className="text-center space-y-4 mb-16 px-3 py-6 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg fade-in-up delay-100 hover-lift">
           <p 
             className="text-[#6b5548] text-xl tracking-[0.15em] font-medium"
             style={{ fontFamily: "Amiri, serif" }}
@@ -387,7 +390,7 @@ export default function Component() {
         </div>
 
         {/* Parents Invitation */}
-        <div className="text-center space-y-4 mb-10 px-4 py-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-[#c9a0a0]/30 shadow-lg fade-in-up delay-200">
+        <div className="text-center space-y-4 mb-10 px-4 py-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-[#c9a0a0]/30 shadow-lg fade-in-up delay-200 hover-lift">
           <p 
             className="text-[#6b5548] text-sm tracking-wider leading-relaxed"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -395,7 +398,7 @@ export default function Component() {
             Mr. & Mrs. Syed Imran Hussain
           </p>
           <p 
-            className="text-[#8b7355] text-lg"
+            className="text-[#8b7355] text-lg float"
             style={{ fontFamily: "Great Vibes, cursive" }}
           >
             and
@@ -415,8 +418,8 @@ export default function Component() {
         </div>
 
         {/* Names Section */}
-        <div className="text-center space-y-3 mb-10 px-3 py-6 bg-white/60 backdrop-blur-sm rounded-2xl">
-          <div className="fade-in-up delay-300">
+        <div className="text-center space-y-3 mb-10 px-3 py-6 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg fade-in-up delay-300">
+          <div className="hover-lift">
             <h1
               className="text-4xl md:text-6xl text-[#6b5548] font-normal leading-tight"
               style={{ fontFamily: "Great Vibes, cursive" }}
@@ -431,12 +434,12 @@ export default function Component() {
             </p>
           </div>
           <p 
-            className="text-3xl text-[#c9a0a0] fade-in-scale delay-400"
+            className="text-3xl text-[#c9a0a0] fade-in-scale delay-400 float"
             style={{ fontFamily: "Great Vibes, cursive" }}
           >
             with
           </p>
-          <div className="fade-in-up delay-500">
+          <div className="hover-lift">
             <h1
               className="text-4xl md:text-6xl text-[#6b5548] font-normal leading-tight"
               style={{ fontFamily: "Great Vibes, cursive" }}
@@ -453,7 +456,7 @@ export default function Component() {
         </div>
 
         {/* Save the Date Section */}
-        <div className="text-center space-y-3 mb-8 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up delay-600">
+        <div className="text-center space-y-3 mb-8 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up delay-400 hover-lift">
           <h3 
             className="text-2xl md:text-3xl text-[#8b7355]"
             style={{ fontFamily: "Great Vibes, cursive" }}
@@ -469,7 +472,7 @@ export default function Component() {
         </div>
 
         {/* Date Section */}
-        <div className="text-center space-y-4 mb-10 px-3 py-6 bg-white/70 backdrop-blur-sm rounded-2xl fade-in-up delay-700">
+        <div className="text-center space-y-4 mb-10 px-3 py-6 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg fade-in-up delay-500 hover-lift">
           <p 
             className="text-[#6b5548] text-base tracking-[0.2em] uppercase font-medium"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -485,7 +488,7 @@ export default function Component() {
               April
             </p>
             
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3 flex-wrap">
               <div className="w-10 md:w-16 h-px bg-[#c9a0a0]" />
               <span 
                 className="text-[#6b5548] text-xs tracking-[0.15em] uppercase font-medium"
@@ -494,7 +497,7 @@ export default function Component() {
                 Friday
               </span>
               <span 
-                className="text-5xl md:text-6xl text-[#6b5548] font-light"
+                className="text-5xl md:text-6xl text-[#6b5548] font-light pulse"
                 style={{ fontFamily: "Cormorant Garamond, serif" }}
               >
                 3
@@ -518,7 +521,7 @@ export default function Component() {
         </div>
 
         {/* Venue Section */}
-        <div className="text-center space-y-4 mb-12 px-4 py-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-[#c9a0a0]/30 shadow-lg fade-in-up delay-800">
+        <div className="text-center space-y-4 mb-12 px-4 py-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-[#c9a0a0]/30 shadow-lg fade-in-up delay-600 hover-lift">
           <p 
             className="text-[#8b7355] text-sm tracking-[0.15em] uppercase font-medium"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -541,7 +544,7 @@ export default function Component() {
           <Button
             onClick={handleLocationClick}
             variant="outline"
-            className="mt-4 border-[#c9a0a0] text-[#6b5548] hover:bg-white/50 rounded-full px-8 py-2 text-sm tracking-wider font-medium transition-all duration-300"
+            className="mt-4 border-[#c9a0a0] text-[#6b5548] hover:bg-white/50 rounded-full px-8 py-2 text-sm tracking-wider font-medium transition-all duration-300 hover-lift"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
           >
             View Location
@@ -549,14 +552,14 @@ export default function Component() {
         </div>
 
         {/* Decorative Divider */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex items-center justify-center gap-4 mb-12 fade-in-up delay-700">
           <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#c9a0a0]" />
-          <div className="w-2 h-2 rounded-full bg-[#c9a0a0]" />
+          <div className="w-2 h-2 rounded-full bg-[#c9a0a0] rotate-slow" />
           <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#c9a0a0]" />
         </div>
 
         {/* Countdown Section */}
-        <div className="text-center space-y-4 mb-10 px-3 py-6 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up">
+        <div className="text-center space-y-4 mb-10 px-3 py-6 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up delay-800">
           <p 
             className="text-2xl md:text-3xl text-[#8b7355]"
             style={{ fontFamily: "Great Vibes, cursive" }}
@@ -569,8 +572,12 @@ export default function Component() {
               { value: timeLeft.hours, label: "Hours" },
               { value: timeLeft.minutes, label: "Mins" },
               { value: timeLeft.seconds, label: "Secs" },
-            ].map(({ value, label }) => (
-              <div key={label} className="bg-white/80 backdrop-blur-sm rounded-lg p-2 shadow-sm">
+            ].map(({ value, label }, index) => (
+              <div 
+                key={label} 
+                className="bg-white/80 backdrop-blur-sm rounded-lg p-2 shadow-sm hover-lift"
+                style={{ animationDelay: `${0.9 + index * 0.1}s`, opacity: 0, animation: 'fadeInUp 0.6s ease forwards' }}
+              >
                 <div 
                   className="text-xl font-medium text-[#6b5548]" 
                   style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -590,7 +597,7 @@ export default function Component() {
           <Button
             onClick={handleSaveTheDate}
             variant="outline"
-            className="border-[#c9a0a0] text-[#6b5548] hover:bg-white/50 rounded-full px-6 py-2 text-xs tracking-wider font-medium transition-all duration-300"
+            className="border-[#c9a0a0] text-[#6b5548] hover:bg-white/50 rounded-full px-6 py-2 text-xs tracking-wider font-medium transition-all duration-300 hover-lift"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
           >
             Save The Date
@@ -598,7 +605,7 @@ export default function Component() {
         </div>
 
         {/* Islamic Quote */}
-        <div className="text-center space-y-3 mb-10 px-3 py-5 bg-white/70 backdrop-blur-sm rounded-2xl fade-in-up">
+        <div className="text-center space-y-3 mb-10 px-3 py-5 bg-white/70 backdrop-blur-sm rounded-2xl fade-in-up delay-900 hover-lift">
           <p 
             className="text-[#8b7355] text-xs tracking-wider font-medium"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -622,7 +629,7 @@ export default function Component() {
         </div>
 
         {/* RSVP Section */}
-        <div className="text-center space-y-4 mb-10 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up">
+        <div className="text-center space-y-4 mb-10 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up delay-1000 hover-lift">
           <p 
             className="text-2xl md:text-3xl text-[#8b7355]"
             style={{ fontFamily: "Great Vibes, cursive" }}
@@ -637,7 +644,7 @@ export default function Component() {
           </p>
           <Button
             onClick={handleRSVPClick}
-            className="bg-[#8b7355] hover:bg-[#6b5548] text-white rounded-full px-8 py-2 text-xs font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 tracking-wider"
+            className="bg-[#8b7355] hover:bg-[#6b5548] text-white rounded-full px-8 py-2 text-xs font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 tracking-wider gentle-bounce"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
           >
             <span className="flex items-center gap-2">
@@ -650,7 +657,7 @@ export default function Component() {
         </div>
 
         {/* Footer */}
-        <div className="text-center space-y-4 pb-6 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up">
+        <div className="text-center space-y-4 pb-6 px-3 py-5 bg-white/60 backdrop-blur-sm rounded-2xl fade-in-up delay-1000">
           <p 
             className="text-[#8b7355] text-xs tracking-wider italic"
             style={{ fontFamily: "Cormorant Garamond, serif" }}
@@ -665,7 +672,6 @@ export default function Component() {
           </p>
         </div>
 
-        {/* Spacer for bottom padding */}
         <div className="h-16" />
       </div>
     </div>
